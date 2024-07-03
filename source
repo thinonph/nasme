@@ -508,9 +508,17 @@ Tab6:Keybind("Toggle",Enum.KeyCode.V,function()
     Library:Toggle()
 end)
 
-local Tab7 = Window:Tab("Credits",false)
+local Tab7 = Window:Tab("testing stuff",false)
 
-Tab7:Label("s.y.nx , tiny")
+Tab7:Button("BETTER SILENT (b) for fov (t) for off and on",function(bool)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/thinonph/silent/main/silent"))();
+end)
+
+
+local Tab8 = Window:Tab("Credits",false)
+
+Tab8:Label('synax , tiny')
+
 
 local Aiming = loadstring(game:HttpGet("https://pastebin.com/raw/vsVecTqs"))()
 Aiming.TeamCheck(false)
