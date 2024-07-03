@@ -6,7 +6,7 @@ local Tab1 = Window:Tab("Aimlocks",true)
 
 Tab1:Label("Aimlock")
 
-Tab1:Button("retard's Aimlock",function(bool)
+Tab1:Button("catrine lock",function(bool)
     getgenv().AimPart = "HumanoidRootPart"
 	getgenv().AimlockKey = "q"
 	getgenv().AimRadius = 30
@@ -14,7 +14,7 @@ Tab1:Button("retard's Aimlock",function(bool)
 	getgenv().FirstPerson = true
 	getgenv().TeamCheck = false
 	getgenv().PredictMovement = true
-	getgenv().PredictionVelocity = 5
+	getgenv().PredictionVelocity = 6
 	local L_27_, L_28_, L_29_, L_30_ =
             game:GetService "Players",
             game:GetService "UserInputService",
@@ -192,7 +192,7 @@ Tab1:Textbox("Aimlock Keybind","Q",function(bool)
     getgenv().AimlockKey = bool
 end)
 
-Tab1:Textbox("AimLock Prediction","5",function(bool)
+Tab1:Textbox("AimLock Prediction","6",function(bool)
     PredictionVelocity = bool
 end)
 
@@ -227,9 +227,9 @@ local Tab3 = Window:Tab("Player",false)
 Tab3:Label("Player Scripts")
 
 game.StarterGui:SetCore("SendNotification", {
-    Title = "daretard";
-    Text = "ur skid";
-    Icon = "RBXID OR BLANK";
+    Title = "catrine";
+    Text = "Welcome";
+    Icon = "5706217688";
     Duration = "DURATION IN SECONDS";
     callbakc = bindableFunction;
     Button1 = "Okay";
@@ -294,6 +294,32 @@ end)
 
 Tab3:Slider("Fov Camera",80,200,function(text)
     workspace.CurrentCamera.FieldOfView = (text)
+end)
+
+Tab3:Button("Tryhard Anims",function(bool)
+    while true do
+        wait(1)
+        for i, player in ipairs(game.Players:GetChildren()) do
+        local Animate = game.Players.LocalPlayer.Character.Animate
+    Animate.idle.Animation1.AnimationId = "http://www.roblox.com/asset/?id=782841498"
+    Animate.idle.Animation2.AnimationId = "http://www.roblox.com/asset/?id=782841498"
+    Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616168032"
+    Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616163682"
+    Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1083218792"
+    Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1083439238"
+    Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=707829716"
+    game.Players.LocalPlayer.Character.Humanoid.Jump = false
+        end
+    end
+end)
+
+Tab3:Button("Headless Client Sided",function(bool)
+    getgenv().game.Players.LocalPlayer.Character.Head.Transparency = 1
+    getgenv().game.Players.LocalPlayer.Character.Head.face:Destroy()
+    getgenv().game.Players.LocalPlayer.Character.Head.face:Destroy()
+end)
+Tab3:Button ("skin changer be in skins select",function(bool)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/thinonph/skin/main/skinchanger%20da%20hood"))();
 end)
 
 
