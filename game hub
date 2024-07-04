@@ -14,7 +14,7 @@ local Tab2 = Window:Tab("lumber tycoon",true)
 Tab2:label("lumber tycoon!!")
 
 Tab2:Button("butter hub",function(bool)
-loadstring(game:HttpGet('https://raw.githubusercontent.com/Butterisgood/Butter/main/Root2.lua'))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Butterisgood/Butter/main/Root2.lua"))()
 end)
 
 
