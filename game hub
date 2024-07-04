@@ -4,3 +4,34 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Mappl
 local Window = Library:Create("catrine","game hub")
 local Tab1 = Window:Tab("jail break",true)
 
+Tab1:Label("jail break!!")
+
+Tab1:Button("project auto",function(bool)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxsta72/ProjectAuto/main/AutoRobV4Release"))()
+end)
+
+local Tab2 = Window:Tab("lumber tycoon",true)
+Tab2:label("lumber tycoon!!")
+
+Tab2:Button("butter hub",function(bool)
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Butterisgood/Butter/main/Root2.lua'))()
+end)
+
+
+local Tab3 = Window:tab("blox fruits",true)
+Tab3:label("blox fruits")
+
+Tab3:Button("momo hub",function(bool)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SkibidiSupremacy/Loader.xyz/main/Loader.Blurk%20ST%20%3A%20G"))()
+end)
+
+
+local Tab4 = Window:tab("",true)
+Tab4:label("")
+
+Tab4:Button("",function(bool)
+
+end)
+
+
+
