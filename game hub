@@ -6,8 +6,8 @@ local Tab1 = Window:Tab("jail break",true)
 
 Tab1:Label("jail break!!")
 
-Tab1:Button("project auto",function(bool)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Pxsta72/ProjectAuto/main/AutoRobV4Release"))()
+Tab1:Button("jailbreakv2",function(bool)
+https://raw.githubusercontent.com/thinonph/nasme/main/jailbreak
 end)
 
 local Tab2 = Window:Tab("lumber tycoon",true)
