@@ -156,7 +156,7 @@ UserInputService.InputBegan:Connect(function(Input)
         
         if _G.SendNotifications == true then
             game:GetService("StarterGui"):SetCore("SendNotification",{
-                Title = "Exunys Developer";
+                Title = "synax esp";
                 Text = "The ESP's visibility is now set to "..tostring(_G.ESPVisible)..".";
                 Duration = 5;
             })
