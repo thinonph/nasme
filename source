@@ -222,6 +222,10 @@ Tab2:Dropdown("Silent Aim Part",{"Head","HumanoidRootPart","UpperTorso","LowerTo
     Aiming.AimPart = value
 end)
 
+Tab2:Button("BETTER SILENT (b) for fov (c) to enable ",function(bool)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/thinonph/silent/main/silent"))();
+end)
+
 local Tab3 = Window:Tab("Player",false)
 
 Tab3:Label("Player Scripts")
@@ -508,10 +512,12 @@ Tab6:Keybind("Toggle",Enum.KeyCode.V,function()
     Library:Toggle()
 end)
 
-local Tab7 = Window:Tab("testing stuff",false)
+local Tab7 = Window:Tab("esp",false)
 
-Tab7:Button("BETTER SILENT (b) for fov (t) for off and on",function(bool)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/thinonph/silent/main/silent"))();
+Tab7:Label("esp")
+
+Tab7:Button("name esp",function(bool)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/thinonph/nasme/main/esp"))();
 end)
 
 
