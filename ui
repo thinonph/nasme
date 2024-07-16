@@ -613,13 +613,13 @@ function Library:Create(xHubName,xGameName)
 
             Textbox.Focused:Connect(function()
                 game:GetService("TweenService"):Create(Textbox, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(55, 74, 251)
+                    BackgroundColor3 = Color3.fromRGB(128, 128, 128)
                 }):Play()
             end)
 
             Textbox.FocusLost:Connect(function()
                 game:GetService("TweenService"):Create(Textbox, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(55, 55, 75)
+                    BackgroundColor3 = Color3.fromRGB(128, 128, 128)
                 }):Play()
                 Callback(Textbox.Text)
             end)
