@@ -1,0 +1,29 @@
+           
+
+        local args = {
+            [1] = "Box Job"
+        }
+
+        if Value then
+            game:GetService("ReplicatedStorage").RemoteEvents.FetchGUI:FireServer(unpack(args))
+
+            -- Teleport to the first location
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(-552.4525146484375, 3.5371451377868652, -83.8554458618164))
+
+            -- Hold 'E' for 5 seconds
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.E, false, game)
+
+            wait(5) -- Wait for 5 seconds
+
+            -- Teleport to the second location
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Vector3.new(-401.3119201660156, 3.4121932983398438, -72.4224853515625))
+
+            -- Hold 'E' for another 5 seconds
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.E, false, game)
+
+            wait(5) -- Wait for 5 seconds
+        else
+            -- Code to handle turning off the autofarm (if needed)
+            -- In this example, let's assume there's nothing specific to do when turning off, so we'll simply do nothing
+        end
+    end,
