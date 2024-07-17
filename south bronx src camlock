@@ -1,168 +1,184 @@
-getgenv().OldAimPart = "HumanoidRootPart"
-getgenv().AimPart = "HumanoidRootPart" -- For R15 Games: {UpperTorso, LowerTorso, HumanoidRootPart, Head} | For R6 Games: {Head, Torso, HumanoidRootPart}  
-    getgenv().AimlockKey = "q"
-    getgenv().AimRadius = 100 -- How far away from someones character you want to lock on at
-    getgenv().ThirdPerson = true 
-    getgenv().FirstPerson = true
-    getgenv().TeamCheck = false -- Check if Target is on your Team (True means it wont lock onto your teamates, false is vice versa) (Set it to false if there are no teams)
-    getgenv().PredictMovement = true -- Predicts if they are moving in fast velocity (like jumping) so the aimbot will go a bit faster to match their speed 
-    getgenv().PredictionVelocity = 6.612
-    getgenv().CheckIfJumped = true
-    getgenv().Smoothness = false
-    getgenv().SmoothnessAmount = 0.4
-
-    local Players, Uis, RService, SGui = game:GetService"Players", game:GetService"UserInputService", game:GetService"RunService", game:GetService"StarterGui";
-    local Client, Mouse, Camera, CF, RNew, Vec3, Vec2 = Players.LocalPlayer, Players.LocalPlayer:GetMouse(), workspace.CurrentCamera, CFrame.new, Ray.new, Vector3.new, Vector2.new;
-    local Aimlock, MousePressed, CanNotify = true, false, false;
-    local AimlockTarget;
-    local OldPre;
-    
-
-    
-    getgenv().WorldToViewportPoint = function(P)
-        return Camera:WorldToViewportPoint(P)
-    end
-    
-    getgenv().WorldToScreenPoint = function(P)
-        return Camera.WorldToScreenPoint(Camera, P)
-    end
-    
-    getgenv().GetObscuringObjects = function(T)
-        if T and T:FindFirstChild(getgenv().AimPart) and Client and Client.Character:FindFirstChild("Head") then 
-            local RayPos = workspace:FindPartOnRay(RNew(
-                T[getgenv().AimPart].Position, Client.Character.Head.Position)
-            )
-            if RayPos then return RayPos:IsDescendantOf(T) end
-        end
-    end
-    
-    getgenv().GetNearestTarget = function()
-        -- Credits to whoever made this, i didnt make it, and my own mouse2plr function kinda sucks
-        local players = {}
-        local PLAYER_HOLD  = {}
-        local DISTANCES = {}
-        for i, v in pairs(Players:GetPlayers()) do
-            if v ~= Client then
-                table.insert(players, v)
-            end
-        end
-        for i, v in pairs(players) do
-            if v.Character ~= nil then
-                local AIM = v.Character:FindFirstChild("Head")
-                if getgenv().TeamCheck == true and v.Team ~= Client.Team then
-                    local DISTANCE = (v.Character:FindFirstChild("Head").Position - game.Workspace.CurrentCamera.CFrame.p).magnitude
-                    local RAY = Ray.new(game.Workspace.CurrentCamera.CFrame.p, (Mouse.Hit.p - game.Workspace.CurrentCamera.CFrame.p).unit * DISTANCE)
-                    local HIT,POS = game.Workspace:FindPartOnRay(RAY, game.Workspace)
-                    local DIFF = math.floor((POS - AIM.Position).magnitude)
-                    PLAYER_HOLD[v.Name .. i] = {}
-                    PLAYER_HOLD[v.Name .. i].dist= DISTANCE
-                    PLAYER_HOLD[v.Name .. i].plr = v
-                    PLAYER_HOLD[v.Name .. i].diff = DIFF
-                    table.insert(DISTANCES, DIFF)
-                elseif getgenv().TeamCheck == false and v.Team == Client.Team then 
-                    local DISTANCE = (v.Character:FindFirstChild("Head").Position - game.Workspace.CurrentCamera.CFrame.p).magnitude
-                    local RAY = Ray.new(game.Workspace.CurrentCamera.CFrame.p, (Mouse.Hit.p - game.Workspace.CurrentCamera.CFrame.p).unit * DISTANCE)
-                    local HIT,POS = game.Workspace:FindPartOnRay(RAY, game.Workspace)
-                    local DIFF = math.floor((POS - AIM.Position).magnitude)
-                    PLAYER_HOLD[v.Name .. i] = {}
-                    PLAYER_HOLD[v.Name .. i].dist= DISTANCE
-                    PLAYER_HOLD[v.Name .. i].plr = v
-                    PLAYER_HOLD[v.Name .. i].diff = DIFF
-                    table.insert(DISTANCES, DIFF)
-                end
-            end
-        end
-        
-        if unpack(DISTANCES) == nil then
-            return nil
-        end
-        
-        local L_DISTANCE = math.floor(math.min(unpack(DISTANCES)))
-        if L_DISTANCE > getgenv().AimRadius then
-            return nil
-        end
-        
-        for i, v in pairs(PLAYER_HOLD) do
-            if v.diff == L_DISTANCE then
-                return v.plr
-            end
-        end
-        return nil
-    end
-    
-    Mouse.KeyDown:Connect(function(a)
-        if not (Uis:GetFocusedTextBox()) then 
-            if a == AimlockKey and AimlockTarget == nil then
-                pcall(function()
-                    if MousePressed ~= true then MousePressed = true end 
-                    local Target;Target = GetNearestTarget()
-                    if Target ~= nil then 
-                        AimlockTarget = Target
-                    end
-                end)
-            elseif a == AimlockKey and AimlockTarget ~= nil then
-                if AimlockTarget ~= nil then AimlockTarget = nil end
-                if MousePressed ~= false then 
-                    MousePressed = false 
-                end
-            end
-        end
-    end)
-    
-    RService.RenderStepped:Connect(function()
-        if getgenv().ThirdPerson == true and getgenv().FirstPerson == true then 
-            if (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude > 1 or (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude <= 1 then 
-                CanNotify = true 
-            else 
-                CanNotify = false 
-            end
-        elseif getgenv().ThirdPerson == true and getgenv().FirstPerson == false then 
-            if (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude > 1 then 
-                CanNotify = true 
-            else 
-                CanNotify = false 
-            end
-        elseif getgenv().ThirdPerson == false and getgenv().FirstPerson == true then 
-            if (Camera.Focus.p - Camera.CoordinateFrame.p).Magnitude <= 1 then 
-                CanNotify = true 
-            else 
-                CanNotify = false 
-            end
-        end
-        if Aimlock == true and MousePressed == true then 
-            if AimlockTarget and AimlockTarget.Character and AimlockTarget.Character:FindFirstChild(getgenv().AimPart) then 
-                if getgenv().FirstPerson == true then
-                    if CanNotify == true then
-                        if getgenv().PredictMovement == true then
-                            if getgenv().Smoothness == true then
-                                --// The part we're going to lerp/smoothen \\--
-                                local Main = CF(Camera.CFrame.p, AimlockTarget.Character[getgenv().AimPart].Position + AimlockTarget.Character[getgenv().AimPart].Velocity/PredictionVelocity)
-                                
-                                --// Making it work \\--
-                                Camera.CFrame = Camera.CFrame:Lerp(Main, getgenv().SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
-                            else
-                                Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[getgenv().AimPart].Position + AimlockTarget.Character[getgenv().AimPart].Velocity/PredictionVelocity)
-                            end
-                        elseif getgenv().PredictMovement == false then 
-                            if getgenv().Smoothness == true then
-                                --// The part we're going to lerp/smoothen \\--
-                                local Main = CF(Camera.CFrame.p, AimlockTarget.Character[getgenv().AimPart].Position)
-
-                                --// Making it work \\--
-                                Camera.CFrame = Camera.CFrame:Lerp(Main, getgenv().SmoothnessAmount, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
-                            else
-                                Camera.CFrame = CF(Camera.CFrame.p, AimlockTarget.Character[getgenv().AimPart].Position)
-                            end
-                        end
-      end
-        end
-         if CheckIfJumped == true then
-       if AimlockTarget.Character.HuDDDDDDDDDDWmanoid.FloorMaterial == Enum.Material.Air then
-    
-           getgenv().AimPart = "HumanoidRootPart"
-       else
-         getgenv().AimPart = getgenv().OldAimPart
-
-       end
-    end
+getgenv().AimPart = "HumanoidRootPart"
+	local sound = Instance.new("Sound")
+	sound.SoundId = "rbxassetid://413861777"
+	sound.Parent = game:GetService("SoundService")
+	sound:Play()
+	getgenv().AimlockKey = "q"
+	getgenv().AimRadius = 45
+	getgenv().ThirdPerson = true
+	getgenv().FirstPerson = true
+	getgenv().TeamCheck = false
+	getgenv().PredictMovement = true
+	getgenv().PredictionVelocity = 9
+	local L_27_, L_28_, L_29_, L_30_ =
+            game:GetService "Players",
+            game:GetService "UserInputService",
+            game:GetService "RunService",
+            game:GetService "StarterGui"
+	local L_31_, L_32_, L_33_, L_34_, L_35_, L_36_, L_37_ =
+            L_27_.LocalPlayer,
+            L_27_.LocalPlayer:GetMouse(),
+            workspace.CurrentCamera,
+            CFrame.new,
+            Ray.new,
+            Vector3.new,
+            Vector2.new
+	local L_38_, L_39_, L_40_ = true, false, false
+	local L_41_
+	getgenv().CiazwareUniversalAimbotLoaded = true
+	getgenv().WorldToViewportPoint = function(L_42_arg0)
+		return L_33_:WorldToViewportPoint(L_42_arg0)
+	end
+	getgenv().WorldToScreenPoint = function(L_43_arg0)
+		return L_33_.WorldToScreenPoint(L_33_, L_43_arg0)
+	end
+	getgenv().GetObscuringObjects = function(L_44_arg0)
+		if L_44_arg0 and L_44_arg0:FindFirstChild(getgenv().AimPart) and L_31_ and L_31_.Character:FindFirstChild("Head") then
+			local L_45_ = workspace:FindPartOnRay(L_35_(L_44_arg0[getgenv().AimPart].Position, L_31_.Character.Head.Position))
+			if L_45_ then
+				return L_45_:IsDescendantOf(L_44_arg0)
+			end
+		end
+	end
+	getgenv().GetNearestTarget = function()
+		local L_46_ = {}
+		local L_47_ = {}
+		local L_48_ = {}
+		for L_50_forvar0, L_51_forvar1 in pairs(L_27_:GetPlayers()) do
+			if L_51_forvar1 ~= L_31_ then
+				table.insert(L_46_, L_51_forvar1)
+			end
+		end
+		for L_52_forvar0, L_53_forvar1 in pairs(L_46_) do
+			if L_53_forvar1.Character ~= nil then
+				local L_54_ = L_53_forvar1.Character:FindFirstChild("Head")
+				if getgenv().TeamCheck == true and L_53_forvar1.Team ~= L_31_.Team then
+					local L_55_ =
+                            (L_53_forvar1.Character:FindFirstChild("Head").Position - game.Workspace.CurrentCamera.CFrame.p).magnitude
+					local L_56_ =
+                            Ray.new(
+                            game.Workspace.CurrentCamera.CFrame.p,
+                            (L_32_.Hit.p - game.Workspace.CurrentCamera.CFrame.p).unit * L_55_
+                        )
+					local L_57_, L_58_ = game.Workspace:FindPartOnRay(L_56_, game.Workspace)
+					local L_59_ = math.floor((L_58_ - L_54_.Position).magnitude)
+					L_47_[L_53_forvar1.Name .. L_52_forvar0] = {}
+					L_47_[L_53_forvar1.Name .. L_52_forvar0].dist = L_55_
+					L_47_[L_53_forvar1.Name .. L_52_forvar0].plr = L_53_forvar1
+					L_47_[L_53_forvar1.Name .. L_52_forvar0].diff = L_59_
+					table.insert(L_48_, L_59_)
+				elseif getgenv().TeamCheck == false and L_53_forvar1.Team == L_31_.Team then
+					local L_60_ =
+                            (L_53_forvar1.Character:FindFirstChild("Head").Position - game.Workspace.CurrentCamera.CFrame.p).magnitude
+					local L_61_ =
+                            Ray.new(
+                            game.Workspace.CurrentCamera.CFrame.p,
+                            (L_32_.Hit.p - game.Workspace.CurrentCamera.CFrame.p).unit * L_60_
+                        )
+					local L_62_, L_63_ = game.Workspace:FindPartOnRay(L_61_, game.Workspace)
+					local L_64_ = math.floor((L_63_ - L_54_.Position).magnitude)
+					L_47_[L_53_forvar1.Name .. L_52_forvar0] = {}
+					L_47_[L_53_forvar1.Name .. L_52_forvar0].dist = L_60_
+					L_47_[L_53_forvar1.Name .. L_52_forvar0].plr = L_53_forvar1
+					L_47_[L_53_forvar1.Name .. L_52_forvar0].diff = L_64_
+					table.insert(L_48_, L_64_)
+				end
+			end
+		end
+		if unpack(L_48_) == nil then
+			return nil
+		end
+		local L_49_ = math.floor(math.min(unpack(L_48_)))
+		if L_49_ > getgenv().AimRadius then
+			return nil
+		end
+		for L_65_forvar0, L_66_forvar1 in pairs(L_47_) do
+			if L_66_forvar1.diff == L_49_ then
+				return L_66_forvar1.plr
+			end
+		end
+		return nil
+	end
+	L_32_.KeyDown:Connect(
+            function(L_67_arg0)
+		if L_67_arg0 == AimlockKey and L_41_ == nil then
+			pcall(
+                        function()
+				if L_39_ ~= true then
+					L_39_ = true
+				end
+				local L_68_
+				L_68_ = GetNearestTarget()
+				if L_68_ ~= nil then
+					L_41_ = L_68_
+				end
+			end
+                    )
+		elseif L_67_arg0 == AimlockKey and L_41_ ~= nil then
+			if L_41_ ~= nil then
+				L_41_ = nil
+			end
+			if L_39_ ~= false then
+				L_39_ = false
+			end
+		end
+	end
+        )
+	L_29_.RenderStepped:Connect(
+            function()
+		if getgenv().ThirdPerson == true and getgenv().FirstPerson == true then
+			if
+                        (L_33_.Focus.p - L_33_.CoordinateFrame.p).Magnitude > 1 or
+                            (L_33_.Focus.p - L_33_.CoordinateFrame.p).Magnitude <= 1
+                     then
+				L_40_ = true
+			else
+				L_40_ = false
+			end
+		elseif getgenv().ThirdPerson == true and getgenv().FirstPerson == false then
+			if (L_33_.Focus.p - L_33_.CoordinateFrame.p).Magnitude > 1 then
+				L_40_ = true
+			else
+				L_40_ = false
+			end
+		elseif getgenv().ThirdPerson == false and getgenv().FirstPerson == true then
+			if (L_33_.Focus.p - L_33_.CoordinateFrame.p).Magnitude <= 1 then
+				L_40_ = true
+			else
+				L_40_ = false
+			end
+		end
+		if L_38_ == true and L_39_ == true then
+			if L_41_ and L_41_.Character and L_41_.Character:FindFirstChild(getgenv().AimPart) then
+				if getgenv().FirstPerson == true then
+					if L_40_ == true then
+						if getgenv().PredictMovement == true then
+							L_33_.CFrame =
+                                        L_34_(
+                                        L_33_.CFrame.p,
+                                        L_41_.Character[getgenv().AimPart].Position +
+                                            L_41_.Character[getgenv().AimPart].Velocity / PredictionVelocity
+                                    )
+						elseif getgenv().PredictMovement == false then
+							L_33_.CFrame = L_34_(L_33_.CFrame.p, L_41_.Character[getgenv().AimPart].Position)
+						end
+					end
+				elseif getgenv().ThirdPerson == true then
+					if L_40_ == true then
+						if getgenv().PredictMovement == true then
+							L_33_.CFrame =
+                                        L_34_(
+                                        L_33_.CFrame.p,
+                                        L_41_.Character[getgenv().AimPart].Position +
+                                            L_41_.Character[getgenv().AimPart].Velocity / PredictionVelocity
+                                    )
+						elseif getgenv().PredictMovement == false then
+							L_33_.CFrame = L_34_(L_33_.CFrame.p, L_41_.Character[getgenv().AimPart].Position)
+						end
+					end
+				end
+			end
+		end
+	end
+        )
 end)
